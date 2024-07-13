@@ -27,8 +27,8 @@ public class Category {
     this.categoryName = categoryName;
   }
 
-  @Override
+  @Override //ViRo was here!!
   public String toString() {
-    return "ID=" + categoryId + ", categoryName=" + categoryName;
+    return "ID = " + categoryId + ", Category Name = " + categoryName;
   }
 }

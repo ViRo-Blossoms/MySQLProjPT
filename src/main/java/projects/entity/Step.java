@@ -45,8 +45,8 @@ public class Step {
     this.stepOrder = stepOrder;
   }
 
-  @Override
+  @Override //ViRo was here!!
   public String toString() {
-    return "ID=" + stepId + ", stepText=" + stepText;
+    return "ID = " + stepId + ", Step Text = " + stepText;
   }
 }

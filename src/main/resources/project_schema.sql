@@ -19,6 +19,7 @@ material_id INT AUTO_INCREMENT NOT NULL,
 project_id INT NOT NULL,
 material_name VARCHAR(128) NOT NULL,
 num_required INT,
+cost DECIMAL(7,2),
 PRIMARY KEY (material_id),
 FOREIGN KEY (project_id) REFERENCES project (project_id) ON DELETE CASCADE
 );

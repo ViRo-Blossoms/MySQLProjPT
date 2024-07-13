@@ -56,9 +56,9 @@ public class Material {
     this.cost = cost;
   }
 
-  @Override
+  @Override //ViRO was here!!
   public String toString() {
-    return "ID=" + materialId + ", materialName=" + materialName + ", numRequired=" + numRequired
-        + ", cost=" + cost;
+    return "ID = " + materialId + ", Material Name = " + materialName + ", numRequired = " + numRequired
+        + ", cost = " + cost;
   }
 }

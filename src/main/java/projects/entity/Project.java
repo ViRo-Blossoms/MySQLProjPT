@@ -70,7 +70,7 @@ public class Project {
   public void setNotes(String notes) {
     this.notes = notes;
   }
-
+ //ViRo: use F2 to find where stuff is declared!
   public List<Material> getMaterials() {
     return materials;
   }
@@ -83,16 +83,16 @@ public class Project {
     return categories;
   }
 
-  @Override
+  @Override //ViRo: Took a while to find but fiddled with this to be a bit prettier. 
   public String toString() {
     String result = "";
     
-    result += "\n   ID=" + projectId;
-    result += "\n   name=" + projectName;
-    result += "\n   estimatedHours=" + estimatedHours;
-    result += "\n   actualHours=" + actualHours;
-    result += "\n   difficulty=" + difficulty;
-    result += "\n   notes=" + notes;
+    result += "\n   ID =			" + projectId;
+    result += "\n   name =		" + projectName;
+    result += "\n   estimatedHours =	" + estimatedHours;
+    result += "\n   actualHours =	" + actualHours;
+    result += "\n   difficulty =		" + difficulty;
+    result += "\n   notes =		" + notes;
     
     result += "\n   Materials:";
     

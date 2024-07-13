@@ -197,4 +197,162 @@ private List<Material> fetchMaterialsForProject(Connection conn, Integer project
 	}
 } //FMFP
 
+public boolean modifyProjectDetails(Project project) {
+	// @formatter:off
+	String sql = "" 
+			+ "UPDATE " + PROJECT_TABLE + " SET "
+			+ "project_name = ?, "
+			+ "estimated_hours = ?, "
+			+ "actual_hours = ?, "
+			+ "difficulty = ?, "
+			+ "notes = ? " //ViRo: a stray comma here is all it took to kill the code, be vigilant!!
+			+ "WHERE project_id = ?";
+	// @formatter:on
+	try(Connection conn = DbConnection.getConnection())
+	{
+		startTransaction(conn);
+		try(PreparedStatement stmt = conn.prepareStatement(sql))
+		{
+			setParameter(stmt, 1, project.getProjectName(), String.class);
+			setParameter(stmt, 2, project.getEstimatedHours(), BigDecimal.class);
+			setParameter(stmt, 3, project.getActualHours(), BigDecimal.class);
+			setParameter(stmt, 4, project.getDifficulty(), Integer.class);
+			setParameter(stmt, 5, project.getNotes(), String.class);
+			setParameter(stmt, 6, project.getProjectId(), Integer.class);
+			boolean modified = stmt.executeUpdate() == 1;
+			commitTransaction(conn);
+			return modified;
+		}
+		catch(Exception e)
+		{
+			rollbackTransaction(conn);
+			throw new DbException(e);
+		}
+	}
+	catch(SQLException e)
+	{
+		throw new DbException(e);
+	}
+} //MPD
+
+public boolean deleteProject(Integer intInput) {
+	// @formatter:off
+	String sql = ""
+			+ "DELETE FROM " + PROJECT_TABLE + " WHERE project_id = ?";
+	// @formatter:on
+	try(Connection conn = DbConnection.getConnection())
+	{
+		startTransaction(conn);
+		try(PreparedStatement stmt = conn.prepareStatement(sql))
+		{
+			setParameter(stmt, 1, intInput, Integer.class);
+			boolean deleted = stmt.executeUpdate() == 1;
+			commitTransaction(conn);
+			return deleted;
+		}
+		catch(Exception e)
+		{
+			rollbackTransaction(conn);
+			throw new DbException(e);
+		}
+	}
+	catch(SQLException e)
+	{
+		throw new DbException(e);
+	}
+} //DP
+
+public List<Category> fetchAllCategories() {
+	// @formatter:off
+	String sql = "SELECT * FROM " + CATEGORY_TABLE + " ORDER BY category_name"; 
+	// @formatter:on
+	try(Connection conn = DbConnection.getConnection())
+	{
+		startTransaction(conn);
+		try(PreparedStatement stmt = conn.prepareStatement(sql))
+		{
+			try(ResultSet rs = stmt.executeQuery())
+			{
+				List<Category> categories = new LinkedList<>();
+				while(rs.next())
+				{
+					categories.add(extract(rs, Category.class));
+				}
+			return categories;
+			}
+		}
+		catch(Exception e)
+		{
+			rollbackTransaction(conn);
+			throw new DbException(e);
+		}
+	}
+	catch(SQLException e)
+	{
+		throw new DbException(e);
+	}
+} //FAC
+
+public List<Material> fetchAllMaterials() {
+	// @formatter:off
+	String sql = "SELECT * FROM " + MATERIAL_TABLE + " ORDER BY material_name"; 
+	// @formatter:on
+	try(Connection conn = DbConnection.getConnection())
+	{
+		startTransaction(conn);
+		try(PreparedStatement stmt = conn.prepareStatement(sql))
+		{
+			try(ResultSet rs = stmt.executeQuery())
+			{
+				List<Material> materials = new LinkedList<>();
+				while(rs.next())
+				{
+					materials.add(extract(rs, Material.class));
+				}
+			return materials;
+			}
+		}
+		catch(Exception e)
+		{
+			rollbackTransaction(conn);
+			throw new DbException(e);
+		}
+	}
+	catch(SQLException e)
+	{
+		throw new DbException(e);
+	}
+} //FAM
+
+public void AddMaterialToProject(Integer projectId, Material material) {
+	// @formatter:off
+	String sql = "INSERT INTO " + MATERIAL_TABLE
+			+ " (project_id, material_name, num_required, cost)"
+			+ "VALUES (?, ?, ?, ?)"; 
+	// @formatter:on
+
+	try(Connection conn = DbConnection.getConnection())
+	{
+		startTransaction(conn);
+		try(PreparedStatement stmt = conn.prepareStatement(sql))
+		{
+				setParameter(stmt, 1, material.getProjectId(), Integer.class);
+				setParameter(stmt, 2, material.getMaterialName(), String.class);
+				setParameter(stmt, 3, material.getNumRequired(), Integer.class);
+				setParameter(stmt, 4, material.getCost(), BigDecimal.class);
+				stmt.executeUpdate();
+				commitTransaction(conn);
+		}
+		catch(Exception e)
+		{
+			rollbackTransaction(conn);
+			throw new DbException(e);
+		}
+	}
+	catch(SQLException e)
+	{
+		throw new DbException(e);
+	}
+} //AMTP
+
 } //CLASS
